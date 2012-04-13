@@ -15,7 +15,7 @@
 #define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
-#ifdef NODEBUG
+#ifdef NDEBUG
 #define debug(M, ...)
 #else
 #define debug(M, ...) fprintf(stderr,"[" BOLDBLUE "DEBUG" RESET "]" "%s:%d:" M "\n", __FILE__, __LINE__, ##__VA_ARGS__)

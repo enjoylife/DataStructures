@@ -6,88 +6,70 @@
 #include "list.h"
 #include "graph.h"
 
-graph_p create_graph(long int size) {
-    long int i;
-    degree_p degree;
+
+graph_p create_graph(long int num) {
+
     graph_p graph;
-    /* pointer to pointer of lists */
-    list_p * edges;
+    list_p * edges; // pointer to pointer of lists 
+    long int size = num+1; // just in case 
+    long int i;
 
     graph = (graph_p) malloc(sizeof(struct graph));
     check_hard(graph, "Could not create memory for graph");
 
-    edges = (list_p*) malloc(sizeof(list_p));
+    edges = (list_p*) malloc(size*sizeof(list_p));
     check_hard(edges, "Could not create memory for edges");
 
-    degree = (int*) calloc(size, sizeof(int));
-    check_hard(degree, "Could not create memory for degree pointer");
 
-    for(i=0;i<size;i++){
-        /* create actuall lists */
-        edges[i] = create_list();
-    }
-
+    for(i=0;i<size;i++) edges[i] = create_list();
 
     graph->nedges = 0;
-    graph->nvertices = 0;
-    graph->degrees = degree;
+    graph->nvertices = num;
     graph->edge_list = edges;
     return graph;
 }
 
 void destroy_graph(graph_p graph) {
+
     long int i;
-    long int size = graph->nvertices;
-    list_p * list = graph->edge_list;
+    long int size = graph->nvertices+1;
     for(i=0;i<size;i++){
         /* destroy actuall lists */
-        destroy_list(list[i]);
+        destroy_list(graph->edge_list[i]);
     }
+    free(graph->edge_list);
     free(graph);
 }
 
-void  fread_into_graph( char * filename,bool directed) {
+graph_p graph_from_file(char * filename,bool directed) {
 
-    FILE * fp;
-    long int i;
-    long  int numvertices, numedges; /* Number vertices and  of edges */
-    long  int vertex_a, vertex_b; /* vertices in an edge(a,b) */
+    FILE * fp; // 
+    graph_p graph;
+    long  int numvert, numedge; // Number vertices and  of edges 
+    long  int vertex_a, vertex_b; // vertices in an edge(a,b) 
 
     fp = fopen(filename, "r");
-    if(!fp){
-    log_err("Failed to open Graph for Reading");
-    exit(1);
-    }
+    check_hard(fp,"Could not find or open file");
+
     /* Read in the header line */
-    fscanf(fp, "%ld %ld",&numvertices,&numedges);
+    fscanf(fp, "%ld %ld", &numvert,&numedge);
+    graph = create_graph(numvert);
+    log_info("Graph: %ld vertices, and %ld edges",numvert, numedge);
+    log_info("Starting to reading edges");
 
-    /* create array of  pointers to lists */
-
-    list_p * graph= calloc(numvertices+2, sizeof(list_p));
-    for(i=0;i<numvertices+2;i++){
-        /* create actuall lists */
-        graph[i] = create_list();
+    while(fscanf(fp, "%ld %ld", &vertex_a, &vertex_b)!=EOF) {
+        debug("Inserting new edge  %ld",vertex_a);
+        insert_edge(graph,vertex_a, vertex_b, directed);
     }
-
-    log_info("Going to be reading in %ld vertices, and %ld edges",
-            numvertices, numedges);
-    log_info("Reading Edges");
-
-    while(fscanf(fp, "%ld %ld", &vertex_a, &vertex_b)!=EOF)
-    {
-        debug("Inserting new edge list for %ld",vertex_a);
-        list_add(graph[vertex_a], vertex_b);
-        debug("Added edge (%ld,%ld) to vertex list %ld",
-                vertex_a,vertex_b,vertex_a);
-    }
-
+    fclose(fp);
+    return graph;
 }
 
-void insert_edge(list_p * l, long int x, long int y, bool directed) {
+void insert_edge(graph_p graph, long int x, long int y, bool directed) {
 
-    list_add(l[x],y);
+    list_add(graph->edge_list[x],y);
     if(directed){
-        list_add(l[y],x);
+        list_add(graph->edge_list[y],x);
     }
 }
 

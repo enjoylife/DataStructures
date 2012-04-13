@@ -13,7 +13,7 @@ int main(int argc, char** argv){
 
     /*tester vars */
     int a; 
-    node_p node;
+    node_p node, newn;
 
 	log_info("The size of (list): %ld", sizeof(struct list));
     log_info("The size of (list_p): %ld", sizeof(list_p)); 
@@ -33,25 +33,26 @@ int main(int argc, char** argv){
     check(list_first(list)->next==NULL,"Wrong pointers to list next?");
     log_success("creationism?");
 
-    node_p newn = list_pop(list);
+    newn = list_pop(list);
     check(newn, "Pop didnt return a node_p?");
     check(list->length ==0,"Incorrect Length increment?");
     check(newn->data==10, "incorrect data in  popped node");
+    free(newn);
     log_success("Pop those nodes!");
 
     list_add(list,a);
     newn = list_poll(list);
     check(newn->data==10, "data didnt transfer from poll");
     check(list->length==0, "length didnt adjust in poll");
+    free(newn);
     log_success("Poll those nodes!");
 
     check(list->first==NULL,"Error in pop?");
     lazy_add(list,10);
     check(list->length==10,"Incorrect lazy add");
     destroy_list(list);
-    /** remember now that you have node outside of list you
-     * must free it on your own */
-    free(newn);
+    // remember now that you have node outside of list you
+    // must free it on your own 
     log_success("No leaks here Mario!");
 
     list = create_list();
@@ -60,6 +61,7 @@ int main(int argc, char** argv){
     check(list->length==4,"poll within remove error?");
     list_remove(list,BACK);
     check(list->length==3,"Pop within remove error?");
+    destroy_list(list);
     log_success("Whoa whoses popping and polling without me!?");
 
     log_success(BOLDBLUE"End of test."RESET);

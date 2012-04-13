@@ -18,13 +18,13 @@ void destroy_list(list_p list){
 	node_p next;
 	while(cur){
 		next = cur->next;
-        check_hard(cur,"Free will be undefined for node.");
 		free(cur);
 		cur = next;
 	}
     check_hard(list,"Free will be undefined for list.");
 	free(list);
 }
+
 
 void list_add(list_p list,long int d){
 	node_p node = (node_p)malloc(sizeof(struct linked_node));
@@ -92,13 +92,11 @@ node_p list_poll(list_p list){
 }
 
 void list_remove(list_p list, char end){
-	void * node;
 	if(end == FRONT)
-		node = list_poll(list);
+		free(list_poll(list));
 	else if (end == BACK)
-		node = list_pop(list);
+		free(list_pop(list));
 	else return;
-	free(node);
 }
 
 

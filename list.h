@@ -1,9 +1,9 @@
-#ifndef __LIBDS_LIST_H__
-#define __LIBDS_LIST_H__
+#ifndef __LIST_H__
+#define __LIST_H__
 
 /* A C implementation of a doubly-linked list. 
  * Contains void pointer values.
- * Can be used as a LIFO stack of FIFO queue.
+ * Can be used as a LIFO stack or FIFO queue.
  */
 
 #define FRONT 0
@@ -25,7 +25,7 @@ struct list{
 
 typedef struct list * list_p;
 
-list_p create_list();
+list_p create_list(void);
 
 void destroy_list(list_p list);
 
@@ -35,8 +35,10 @@ node_p list_first(list_p list);
 
 node_p list_last(list_p list);
 
+/* must free node once its out of list */
 node_p list_pop(list_p list);
 
+/* must free node once its out of list */
 node_p list_poll(list_p list);
 
 void list_remove(list_p list, char end);

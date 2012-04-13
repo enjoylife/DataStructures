@@ -9,7 +9,9 @@
 int main(int argc, char** argv){
     check(argc == 2, "Need to specify a filename");
 
-    fread_into_graph(argv[1], 0);
+    graph_p g = create_graph(10);
+    destroy_graph(g);
+    //fread_into_graph(argv[1], 0);
 
 		return 0;
 error:

@@ -6,9 +6,48 @@
 #include "list.h"
 #include "graph.h"
 
+graph_p create_graph(long int size) {
+    long int i;
+    degree_p degree;
+    graph_p graph;
+    /* pointer to pointer of lists */
+    list_p * edges;
 
-void  fread_into_graph( char * filename,bool directed)
-{
+    graph = (graph_p) malloc(sizeof(struct graph));
+    check_hard(graph, "Could not create memory for graph");
+
+    edges = (list_p*) malloc(sizeof(list_p));
+    check_hard(edges, "Could not create memory for edges");
+
+    degree = (int*) calloc(size, sizeof(int));
+    check_hard(degree, "Could not create memory for degree pointer");
+
+    for(i=0;i<size;i++){
+        /* create actuall lists */
+        edges[i] = create_list();
+    }
+
+
+    graph->nedges = 0;
+    graph->nvertices = 0;
+    graph->degrees = degree;
+    graph->edge_list = edges;
+    return graph;
+}
+
+void destroy_graph(graph_p graph) {
+    long int i;
+    long int size = graph->nvertices;
+    list_p * list = graph->edge_list;
+    for(i=0;i<size;i++){
+        /* destroy actuall lists */
+        destroy_list(list[i]);
+    }
+    free(graph);
+}
+
+void  fread_into_graph( char * filename,bool directed) {
+
     FILE * fp;
     long int i;
     long  int numvertices, numedges; /* Number vertices and  of edges */
@@ -38,8 +77,17 @@ void  fread_into_graph( char * filename,bool directed)
     {
         debug("Inserting new edge list for %ld",vertex_a);
         list_add(graph[vertex_a], vertex_b);
-        debug("Added edge (%ld,%ld) to vertex list %d",
+        debug("Added edge (%ld,%ld) to vertex list %ld",
                 vertex_a,vertex_b,vertex_a);
     }
 
 }
+
+void insert_edge(list_p * l, long int x, long int y, bool directed) {
+
+    list_add(l[x],y);
+    if(directed){
+        list_add(l[y],x);
+    }
+}
+

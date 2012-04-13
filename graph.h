@@ -13,7 +13,6 @@ struct graph {
 
 typedef struct graph * graph_p;
     
-
 graph_p create_graph(long int size);
 
 void destroy_graph(graph_p graph);
@@ -24,6 +23,6 @@ graph_p  graph_from_file(char * filename, bool directed);
 
 void insert_edge(graph_p graph, long int, long int, bool); 
 
-
+int vertex_length(graph_p g, long int n);
 
 #endif

@@ -72,4 +72,6 @@ void insert_edge(graph_p graph, long int x, long int y, bool directed) {
         list_add(graph->edge_list[y],x);
     }
 }
-
+int vertex_length(graph_p g, long int n){
+    return g->edge_list[n]->length;
+}

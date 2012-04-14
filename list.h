@@ -6,11 +6,15 @@
  * Can be used as a LIFO stack or FIFO queue.
  */
 
+#ifndef DATATYPE
+#define DATATYPE long int
+#endif
+
 #define FRONT 0
 #define BACK 1
 
 struct linked_node{
-    long int data;
+    DATATYPE data;
 	struct linked_node* next;
 	struct linked_node* prev;
 };
@@ -29,7 +33,7 @@ list_p create_list(void);
 
 void destroy_list(list_p list);
 
-void list_add(list_p list,long int d);
+void list_add(list_p list,DATATYPE d);
 
 node_p list_first(list_p list);
 

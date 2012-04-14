@@ -4,7 +4,7 @@
 #include "list.h"
 #include "dbg.h"
 
-list_p create_list(){
+list_p create_list(void){
 	list_p list = (list_p) malloc(sizeof(struct list));
     check_hard(list, "Could not create memory for list");
 	list->length = 0;
@@ -26,7 +26,7 @@ void destroy_list(list_p list){
 }
 
 
-void list_add(list_p list,long int d){
+void list_add(list_p list,DATATYPE d){
 	node_p node = (node_p)malloc(sizeof(struct linked_node));
     check_hard(node, "Could not create memory for node pointer");
     node->data = d;

@@ -13,6 +13,13 @@
 #define FRONT 0
 #define BACK 1
 
+#ifndef LISTPOINTER
+#define LISTPOINTER  list_p
+#endif
+
+
+
+
 struct linked_node{
     DATATYPE data;
 	struct linked_node* next;
@@ -27,24 +34,24 @@ struct list{
 	node_p last;
 };
 
-typedef struct list * list_p;
+typedef struct list * LISTPOINTER;
 
-list_p create_list(void);
+LISTPOINTER create_list(void);
 
-void destroy_list(list_p list);
+void destroy_list(LISTPOINTER list);
 
-void list_add(list_p list,DATATYPE d);
+void list_add(LISTPOINTER list,DATATYPE d);
 
-node_p list_first(list_p list);
+node_p list_first(LISTPOINTER list);
 
-node_p list_last(list_p list);
-
-/* must free node once its out of list */
-node_p list_pop(list_p list);
+node_p list_last(LISTPOINTER list);
 
 /* must free node once its out of list */
-node_p list_poll(list_p list);
+node_p list_pop(LISTPOINTER list);
 
-void list_remove(list_p list, char end);
+/* must free node once its out of list */
+node_p list_poll(LISTPOINTER list);
+
+void list_remove(LISTPOINTER list, char end);
 
 #endif

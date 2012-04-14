@@ -3,7 +3,6 @@
 #include <stdbool.h>
 
 #include "dbg.h"
-#include "list.h"
 #include "graph.h"
 
 

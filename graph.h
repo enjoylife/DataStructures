@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#ifndef DATATYPE
-#define DATATYPE long int
-#endif
 
 struct edge_node {
     DATATYPE data;

@@ -5,18 +5,18 @@
 #include "list.h"
 #include "dbg.h"
 
-void lazy_add(list_p l, int y);
+void lazy_add(LISTPOINTER l, int y);
 
 int main(int argc, char** argv){
 
-    list_p list = create_list(); /* test lists */
+    LISTPOINTER list = create_list(); /* test lists */
 
     /*tester vars */
     int a; 
     node_p node, newn;
 
 	log_info("The size of (list): %ld", sizeof(struct list));
-    log_info("The size of (list_p): %ld", sizeof(list_p)); 
+    log_info("The size of (LISTPOINTER): %ld", sizeof(LISTPOINTER)); 
     log_info("The size of (linked_node): %ld", sizeof(struct linked_node));
     log_info("The size of (node_p): %ld", sizeof(node_p));
 
@@ -70,7 +70,7 @@ error:
     return 1;
 }
 
-void lazy_add(list_p l, int y){
+void lazy_add(LISTPOINTER l, int y){
     int z;
     for(z=0;z<y;z++){
             list_add(l,z);

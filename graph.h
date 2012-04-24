@@ -1,12 +1,11 @@
 #ifndef __GRAPH_H__
 #define __GRAPH_H__
 
-#include <stdio.h>
 #include <stdbool.h>
 
 
 struct edge_node {
-    DATATYPE data;
+    long int data;
     struct edge_node * next;
 };
 typedef struct edge_node edge_node;
@@ -20,11 +19,9 @@ struct graph {
 
 typedef struct graph * graph_p;
 
-enum state{
-    undiscovered, 
-    discovered, 
-    processed
-    };
+#define undiscovered 0 
+#define discovered  1
+#define processed 2
 
     
 graph_p create_graph(long int size, bool directed);
@@ -35,14 +32,14 @@ void destroy_graph(graph_p graph);
  * First line is: nvertices nedges (seperator is whitespace) */
 graph_p  graph_from_file(char * filename, bool directed);
 
-void insert_edge(graph_p, DATATYPE, DATATYPE, bool); 
+void insert_edge(graph_p, long int, long int, bool); 
 
-long int vertex_length(graph_p g, DATATYPE n);
+long int vertex_length(graph_p g, long int n);
 
-void bfs(graph_p, DATATYPE);
+void bfs(graph_p, long int);
 
-void process_vertex_early(DATATYPE v);
-void process_vertex_late(DATATYPE v);
-void process_edge(DATATYPE x, DATATYPE v);
+void process_vertex_early(edge_node );
+void process_vertex_late(edge_node );
+void process_edge(edge_node , edge_node);
 
 #endif

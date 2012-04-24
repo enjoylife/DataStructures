@@ -1,8 +1,7 @@
 CC = gcc
-CFLAGS = -Wall
-graphtest: graph.o 
-	$(CC) $(CFLAGS) graphtest.c graph.o -o graphtest
-	 queuetest.c -o queuetest
+CFLAGS = -Wall -g
+graphtest: graph.o  graphtest.c queue.o
+	$(CC) $(CFLAGS) graphtest.c graph.o queue.o list.o  -o graphtest
 
 listtest: list.o listtest.c
 	$(CC) $(CFLAGS) listtest.c list.o -o listtest
@@ -10,10 +9,10 @@ listtest: list.o listtest.c
 queuetest: list.o queue.o queuetest.c
 	$(CC) $(CFLAGS) list.o queue.o queuetest.c -o queuetest
 
-graph.o: graph.h dbg.h
-	cc -c graph.c
+graph.o: graph.h graph.c queue.o dbg.h
+	cc -c  graph.c
 
-queue.o: list.o queue.h dbg.h
+queue.o: list.o queue.h  queue.c dbg.h
 	cc -c  queue.c
 
 list.o: list.h list.c dbg.h

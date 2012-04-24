@@ -11,15 +11,21 @@ queue_p create_queue(void){
     return create_list();
 }
 
+void destroy_queue(queue_p q){
+    destroy_list(q);
+}
+
 void enqueue(queue_p q, DATATYPE d){
     return list_add(q, d);
 }
 
 DATATYPE dequeue(queue_p q){
-    return list_poll(q)->data;
+    DATATYPE temp;
+    temp = list_first(q)->data;
+    list_remove(q, FRONT);
+    return temp;
 }
 
-bool isempty(queue_p q){
+bool queue_empty(queue_p q){
     return !q->length;
 }
-

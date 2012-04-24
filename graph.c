@@ -1,17 +1,19 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h> // malloc, calloc, exit, free
+#include <stdbool.h> //bool
+
+#define DATATYPE edge_node 
 
 #include "dbg.h"
 #include "graph.h"
+#include "queue.h"
 
 
-graph_p create_graph(DATATYPE num, bool directed) {
+graph_p create_graph(long int num, bool directed) {
 
     graph_p graph;
     long int  *degree; // pointer to pointer 
-     edge_node ** edges;
-    DATATYPE size = num+1; // just in case 
+    edge_node ** edges;
+    long int size = num+1; // just in case 
 
     graph = (graph_p) malloc(sizeof(struct graph));
     check_hard(graph, "Could not create memory for graph");
@@ -74,7 +76,7 @@ graph_p graph_from_file(char * filename,bool directed) {
     return graph;
 }
 
-void insert_edge(graph_p graph, DATATYPE x, DATATYPE y, bool directed) {
+void insert_edge(graph_p graph, long int x, long int y, bool directed) {
     edge_node * node; 
 
     node = (edge_node*)malloc(sizeof(edge_node));
@@ -92,51 +94,62 @@ void insert_edge(graph_p graph, DATATYPE x, DATATYPE y, bool directed) {
     } else{ graph->nedges++;}
 }
 
-long int vertex_length(graph_p g, DATATYPE n){
+long int vertex_length(graph_p g, long int n){
     return g->vertex_degree_array[n];
 }
 
+void bfs(graph_p g, long int start){
 
-/*
-void bfs(graph_p g, DATATYPE start){
+    long int SIZE = g->nvertices+1; // compensate for create_graph adding 1
 
-    DATATYPE SIZE = g->nvertices+1; // compensate for create_graph()
+    long int i; // counter
+    queue_p queue;
+    edge_node * tempnode;
+    edge_node  vertex;
+    long int parent[SIZE];
+    long int vertex_state[SIZE];
 
-    DATATYPE i; // counter
-    list_p queue, vertex;
-    node_p edge;
-    DATATYPE parent[SIZE];
-    DATATYPE vertex_state[SIZE];
-    enum state state;
-
+    queue = create_queue();
     for(i=0;i<SIZE;i++) vertex_state[i]= undiscovered;
-    queue = create_list(0);
+    for(i=0;i<SIZE;i++) parent[i]= -1;
 
-    list_add(queue, graph->edge_list[start]);
+    // get the actually node from the array
+    enqueue(queue, *(g->vertex_array[start]));
     vertex_state[start] = discovered;
-    while(queue->length!=0){
-        vertex = list_poll(queue);
-        process_vertex_early(g->edge_list[vertex->id]->data);
-        vertex_state[vertex->id] = processed;
-        edge = vertex->first;
-        while(edge){
-            if(vertex_state[graph->edge_list[edge->data]]!=processed
-                    || g->directed){
-                process_edge(
 
-
+    log_info("Starting Breadth first search");
+    while(!queue_empty(queue)){
+        vertex =  dequeue(queue);
+        //process_vertex_early(vertex);
+        check_hard(vertex.data!=1,"it should be %ld", vertex.data);
+        vertex_state[vertex.data] = processed;
+        tempnode = vertex.next;
+        while(tempnode){
+            debug("tempnode data is %ld", tempnode->data);
+            debug("GOOD");
+            debug("tempnode data is %ld", tempnode->data);
+            if(vertex_state[tempnode->data]!=processed || g->directed){
+                debug("GOOD");
+                process_edge(vertex, *tempnode);
+            }
+            if(vertex_state[tempnode->data]==undiscovered){
+                enqueue(queue, (*g->vertex_array[tempnode->data]));
+                vertex_state[tempnode->data] == discovered;
+                parent[tempnode->data] == vertex.data;
+            }
+            tempnode = tempnode->next;
         }
+        process_vertex_late(vertex);
     }
-
-
-
+    destroy_queue(queue);
+    log_info("Finished Search through graph");
 }
 
-void process_vertex_early(DATATYPE v){
+void process_vertex_early(edge_node  v){
 }
-void process_vertex_late(DATATYPE v){
+void process_vertex_late(edge_node  v){
 }
-void process_edge(DATATYPE x, DATATYPE v){
+void process_edge(edge_node x, edge_node v){
 }
 
-*/
+

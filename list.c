@@ -21,7 +21,6 @@ void destroy_list(list_p list){
 		free(cur);
 		cur = next;
 	}
-    check_hard(list,"Free will be undefined for list.");
 	free(list);
 }
 
@@ -98,6 +97,5 @@ void list_remove(list_p list, char end){
 		free(list_pop(list));
 	else return;
 }
-
 
 
